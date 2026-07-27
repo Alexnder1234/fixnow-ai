@@ -1,0 +1,492 @@
+:root {
+  --ink: #12181F;
+  --ink-soft: #2C3844;
+  --paper: #EEF1EC;
+  --paper-raised: #FFFFFF;
+  --amber: #E8890C;
+  --amber-dark: #C36F00;
+  --teal: #0E7C7B;
+  --line: #D3D6C9;
+  --line-dark: #3F4C57;
+  --danger: #B23A2E;
+  --font-display: 'Oswald', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+  --radius: 4px;
+
+  /* Tokens adaptables: cambian con el modo claro/oscuro.
+     Las variables de arriba (--ink, --paper, --amber, etc.) se dejan
+     fijas a propósito — son el acento oscuro de marca (barra superior,
+     barra inferior, tickets destacados) y se ven igual en ambos modos. */
+  --page-bg: var(--paper);
+  --surface: var(--paper-raised);
+  --surface-inset: #EEF1EC;
+  --text: var(--ink);
+  --border: var(--ink);
+}
+
+[data-theme="dark"] {
+  --page-bg: #14191F;
+  --surface: #1E2530;
+  --surface-inset: #262E3A;
+  --text: #EDEFEC;
+  --ink-soft: #A9B2BA;
+  --line: #3A4148;
+  --border: #3F4854;
+}
+
+* { transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease; }
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--page-bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.5;
+}
+
+button, input, select, textarea { font-family: inherit; font-size: 1rem; }
+
+h1, h2, h3 { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.02em; margin: 0; }
+
+/* ---------- Topbar ---------- */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1rem 2rem;
+  background: var(--ink);
+  color: var(--paper);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  border-bottom: 3px solid var(--amber);
+}
+.topbar__brand { display: flex; align-items: center; gap: 0.6rem; cursor: pointer; }
+.topbar__mark {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  background: var(--amber);
+  color: var(--ink);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius);
+  letter-spacing: 0.05em;
+}
+.topbar__name { font-family: var(--font-display); font-size: 1.25rem; letter-spacing: 0.03em; }
+.topbar__ai { color: var(--amber); }
+.topbar__nav { display: flex; gap: 0.5rem; flex: 1; justify-content: center; }
+.navlink {
+  background: none; border: none; color: var(--paper); opacity: 0.75;
+  font-family: var(--font-display); font-size: 0.85rem; letter-spacing: 0.06em;
+  text-transform: uppercase; padding: 0.5rem 0.75rem; cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+.navlink:hover { opacity: 1; border-bottom-color: var(--amber); }
+.topbar__auth { display: flex; gap: 0.5rem; align-items: center; font-family: var(--font-mono); font-size: 0.85rem; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.9rem;
+  padding: 0.75rem 1.4rem;
+  border-radius: var(--radius);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.15s ease;
+}
+.btn:active { transform: translateY(1px); }
+.btn--amber { background: var(--amber); color: var(--ink); box-shadow: 3px 3px 0 var(--border); }
+.btn--amber:hover { background: var(--amber-dark); }
+.btn--ghost { background: transparent; color: var(--text); border-color: var(--border); }
+.btn--ghost:hover { background: var(--ink); color: var(--paper); }
+.btn--small { padding: 0.4rem 0.8rem; font-size: 0.75rem; margin-bottom: 1rem; }
+
+/* ---------- Layout / views ---------- */
+#app { max-width: 1080px; margin: 0 auto; padding: 2.5rem 1.5rem 5rem; }
+.view { display: none; }
+.view--active { display: block; }
+
+/* ---------- Hero ---------- */
+.hero { display: flex; flex-direction: column; gap: 2.5rem; padding-top: 1rem; }
+.hero__ticket {
+  position: relative;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2.5rem 2.5rem 2.5rem 3rem;
+  max-width: 720px;
+}
+.hero__ticket-stub {
+  position: absolute; left: -2px; top: 0; bottom: 0; width: 14px;
+  background-image: radial-gradient(circle at 0 0, transparent 6px, var(--ink) 6.5px);
+  background-size: 14px 22px;
+  background-repeat: repeat-y;
+  border-right: 2px dashed var(--ink);
+}
+.hero__eyebrow { font-family: var(--font-mono); color: var(--amber-dark); font-size: 0.8rem; margin: 0 0 0.75rem; letter-spacing: 0.05em; }
+.hero__title { font-size: 2.6rem; line-height: 1.1; margin-bottom: 1rem; }
+.hero__sub { max-width: 46ch; color: var(--ink-soft); margin-bottom: 1.75rem; }
+.hero__actions { display: flex; gap: 0.9rem; flex-wrap: wrap; }
+.hero__categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.9rem; }
+.hero-cat {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 1rem; text-align: center; font-family: var(--font-display); text-transform: uppercase;
+  font-size: 0.85rem; letter-spacing: 0.03em;
+}
+.hero-cat__icon { font-size: 1.6rem; display: block; margin-bottom: 0.4rem; }
+
+/* ---------- Section headers ---------- */
+.section-title { font-size: 1.7rem; margin-bottom: 0.4rem; }
+.section-sub { color: var(--ink-soft); margin-bottom: 1.5rem; }
+
+/* ---------- Auth ---------- */
+.ticket-form { max-width: 460px; margin: 0 auto; background: var(--surface); border: 2px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.ticket-form__tab-row { display: flex; }
+.tab {
+  flex: 1; padding: 0.9rem; background: var(--ink); color: var(--paper); border: none; cursor: pointer;
+  font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.85rem;
+  opacity: 0.6;
+}
+.tab--active { opacity: 1; background: var(--amber); color: var(--ink); }
+.ticket-form__body { display: flex; flex-direction: column; gap: 1rem; padding: 1.75rem; }
+.ticket-form__body[hidden] { display: none; }
+.ticket-form__body--wide { max-width: none; }
+label { display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.85rem; font-weight: 500; color: var(--ink-soft); }
+input, select, textarea {
+  padding: 0.65rem 0.75rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface-inset);
+  color: var(--text);
+}
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--teal); outline-offset: 1px; }
+.tipo-toggle { border: 1px solid var(--line); border-radius: var(--radius); padding: 0.75rem; }
+.tipo-toggle legend { font-size: 0.8rem; color: var(--ink-soft); padding: 0 0.3rem; }
+.tipo-toggle__opt { flex-direction: row; align-items: center; gap: 0.5rem; font-weight: 400; margin-top: 0.4rem; }
+.form__error { color: var(--danger); font-size: 0.85rem; min-height: 1.2em; margin: 0; }
+
+/* ---------- Buscar / grid de tecnicos ---------- */
+.chip-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+.chip {
+  border: 1px solid var(--border); background: transparent; border-radius: 999px; padding: 0.4rem 0.9rem;
+  font-size: 0.8rem; cursor: pointer; text-transform: uppercase; letter-spacing: 0.03em; font-family: var(--font-display);
+}
+.chip--active { background: var(--ink); color: var(--paper); }
+.tecnico-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.1rem; }
+.tecnico-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 1.25rem; cursor: pointer; display: flex; flex-direction: column; gap: 0.5rem;
+  position: relative;
+}
+.tecnico-card::before {
+  content: "VERIFICADO"; position: absolute; top: 0.75rem; right: 0.75rem; font-family: var(--font-mono);
+  font-size: 0.6rem; color: var(--teal); border: 1px solid var(--teal); padding: 0.1rem 0.4rem; border-radius: 2px;
+  letter-spacing: 0.05em;
+}
+.tecnico-card__cat { font-size: 1.5rem; }
+.tecnico-card__nombre { font-family: var(--font-display); font-size: 1.1rem; text-transform: uppercase; }
+.tecnico-card__meta { font-size: 0.8rem; color: var(--ink-soft); }
+.tecnico-card__rating { font-family: var(--font-mono); color: var(--amber-dark); font-size: 0.9rem; }
+.empty-state { color: var(--ink-soft); font-style: italic; }
+
+/* ---------- Perfil ---------- */
+.perfil-card { background: var(--surface); border: 2px solid var(--border); border-radius: var(--radius); padding: 2rem; }
+.perfil-card__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; }
+.review { border-top: 1px dashed var(--line); padding: 0.9rem 0; }
+.review__meta { font-family: var(--font-mono); font-size: 0.75rem; color: var(--ink-soft); }
+
+/* ---------- Solicitar / estimate ticket ---------- */
+.solicitar-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 2rem; align-items: start; }
+.estimate-ticket {
+  background: var(--ink); color: var(--paper); border-radius: var(--radius); padding: 2rem 1.5rem;
+  position: sticky; top: 6rem; text-align: center;
+}
+.estimate-ticket__label { font-family: var(--font-mono); color: var(--amber); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.08em; }
+.estimate-ticket__amount { font-family: var(--font-mono); font-size: 2.2rem; margin: 0.5rem 0; }
+.estimate-ticket__detail { font-size: 0.8rem; color: #B9C2CA; }
+
+/* ---------- Dashboard / tickets ---------- */
+.ticket-list { display: flex; flex-direction: column; gap: 0.9rem; }
+.ticket-row {
+  display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem;
+}
+.ticket-row__id { font-family: var(--font-mono); color: var(--ink-soft); font-size: 0.8rem; }
+.estado-tag { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; padding: 0.2rem 0.5rem; border-radius: 2px; }
+.estado-pendiente { background: #F3E3C4; color: #7A5B10; }
+.estado-aceptada, .estado-en_proceso { background: #CFE8E7; color: var(--teal); }
+.estado-completada { background: #D8ECD2; color: #2F6B23; }
+.estado-cancelada { background: #F1D3CE; color: var(--danger); }
+
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed; bottom: 1.5rem; left: 50%; transform: translate(-50%, 150%);
+  background: var(--ink); color: var(--paper); padding: 0.8rem 1.4rem; border-radius: var(--radius);
+  font-size: 0.9rem; transition: transform 0.25s ease; z-index: 50; border-left: 4px solid var(--amber);
+}
+.toast--visible { transform: translate(-50%, 0); }
+
+@media (max-width: 760px) {
+  .topbar { flex-wrap: wrap; }
+  .topbar__nav { order: 3; width: 100%; justify-content: space-between; }
+  .solicitar-grid { grid-template-columns: 1fr; }
+  .estimate-ticket { position: static; }
+  .hero__title { font-size: 2rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+
+/* ============ Mobile-first: barra inferior tipo app ============ */
+#app { padding-bottom: 5.5rem; }
+
+.bottomnav {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  display: flex;
+  background: var(--ink);
+  border-top: 2px solid var(--amber);
+  padding: 0.4rem 0.2rem calc(0.4rem + env(safe-area-inset-bottom, 0px));
+  z-index: 30;
+}
+.bottomnav__item {
+  flex: 1;
+  background: none;
+  border: none;
+  color: #8B95A0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.35rem 0.2rem;
+  cursor: pointer;
+  position: relative;
+  font-family: var(--font-body);
+}
+.bottomnav__icon { font-size: 1.25rem; line-height: 1; }
+.bottomnav__label { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.02em; font-family: var(--font-display); }
+.bottomnav__item--active { color: var(--amber); }
+.bottomnav__badge {
+  position: absolute; top: 0.1rem; right: 18%;
+  background: var(--danger); color: #fff; font-family: var(--font-mono);
+  font-size: 0.6rem; min-width: 1.1rem; height: 1.1rem; border-radius: 999px;
+  display: flex; align-items: center; justify-content: center; padding: 0 0.2rem;
+}
+.bottomnav__badge[hidden] { display: none; }
+.topbar__usuario { font-family: var(--font-mono); font-size: 0.8rem; }
+
+.form__ok { color: var(--teal); font-size: 0.85rem; min-height: 1.2em; margin: 0; }
+
+/* ============ Modal de chat ============ */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(18,24,31,0.6);
+  display: flex; align-items: flex-end; justify-content: center;
+  z-index: 40;
+}
+.modal-overlay[hidden] {
+  display: none; /* el atributo hidden por si solo no basta: esta regla lo hace ganar sobre display:flex de arriba */
+}
+.modal {
+  background: var(--surface); width: 100%; max-width: 480px;
+  border-radius: 12px 12px 0 0; display: flex; flex-direction: column;
+  max-height: 80vh; border: 2px solid var(--border); border-bottom: none;
+}
+.modal__head {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1rem 1.2rem; border-bottom: 1px solid var(--line);
+}
+.modal__head h3 { font-size: 1rem; }
+.modal__close { background: none; border: none; font-size: 1.1rem; cursor: pointer; color: var(--text); }
+.modal__body { padding: 1rem 1.2rem; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 0.6rem; min-height: 180px; }
+.modal__body[hidden] { display: none; }
+
+/* ============ Recibo de pago (simulado) ============ */
+.recibo { align-items: center; text-align: center; }
+.recibo__check {
+  width: 64px; height: 64px; border-radius: 50%; background: #D8ECD2; color: #2F6B23;
+  font-size: 2rem; display: flex; align-items: center; justify-content: center;
+  animation: recibo-pop 0.35s ease;
+}
+@keyframes recibo-pop {
+  0% { transform: scale(0.4); opacity: 0; }
+  70% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); }
+}
+.recibo__titulo { font-family: var(--font-display); font-weight: 600; font-size: 1.3rem; color: var(--text); margin: 0.25rem 0 0; }
+.recibo__monto { font-family: var(--font-mono); font-size: 1.8rem; font-weight: 600; color: var(--teal); margin: 0; }
+.recibo__tabla {
+  width: 100%; background: var(--surface-inset); border-radius: 8px; padding: 0.75rem 1rem;
+  display: flex; flex-direction: column; gap: 0.5rem;
+}
+.recibo__tabla div { display: flex; justify-content: space-between; font-size: 0.85rem; }
+.recibo__tabla span:first-child { color: var(--ink-soft); }
+.recibo__tabla span:last-child { font-family: var(--font-mono); font-weight: 600; color: var(--text); }
+.modal__footer { display: flex; gap: 0.5rem; padding: 0.9rem 1.2rem; border-top: 1px solid var(--line); }
+.modal__footer input { flex: 1; }
+
+.chat-bubble {
+  background: var(--surface-inset); border-radius: 8px; padding: 0.5rem 0.75rem; max-width: 80%;
+  align-self: flex-start; font-size: 0.9rem;
+}
+.chat-bubble--propio { align-self: flex-end; background: var(--amber); color: var(--ink); }
+.chat-bubble__meta { font-family: var(--font-mono); font-size: 0.65rem; color: var(--ink-soft); margin-bottom: 0.15rem; }
+.chat-bubble--propio .chat-bubble__meta { color: #5a3d00; }
+
+/* En pantallas grandes, el chat puede centrarse como panel flotante en vez de hoja inferior */
+@media (min-width: 760px) {
+  .modal-overlay { align-items: center; }
+  .modal { border-radius: 12px; border-bottom: 2px solid var(--border); }
+}
+
+/* Ajustes tactiles para movil */
+@media (max-width: 760px) {
+  .topbar { padding: 0.8rem 1rem; }
+  .topbar__name { font-size: 1.05rem; }
+  #app { padding: 1.5rem 1rem 6rem; }
+  .btn { padding: 0.85rem 1.2rem; }
+  input, select, textarea { font-size: 16px; } /* evita zoom automatico de iOS al enfocar */
+  .solicitar-grid { grid-template-columns: 1fr; }
+  .hero__ticket { padding: 1.75rem 1.5rem 1.75rem 2rem; }
+  .hero__title { font-size: 1.9rem; }
+  .ticket-row { flex-direction: column; align-items: flex-start; gap: 0.6rem; }
+  .ticket-row > div:last-child { align-items: flex-start !important; width: 100%; }
+}
+
+/* ============ Pago (simulado) ============ */
+.pago-monto {
+  font-family: var(--font-mono); font-weight: 600; font-size: 2rem; color: var(--text);
+  text-align: center; background: var(--surface-inset); border-radius: 8px; padding: 0.75rem;
+}
+.pago-nota {
+  font-size: 0.72rem; color: var(--ink-soft); background: #F3EEDD; border: 1px solid var(--line);
+  border-radius: 6px; padding: 0.6rem 0.75rem; line-height: 1.4; margin: 0;
+}
+
+/* ============ Estrellas de valoracion ============ */
+.estrellas { display: flex; gap: 0.35rem; font-size: 2.2rem; }
+.estrella {
+  background: none; border: none; cursor: pointer; color: var(--line); line-height: 1;
+  transition: transform 0.1s ease, color 0.1s ease; padding: 0;
+}
+.estrella:hover { transform: scale(1.15); }
+.estrella--activa { color: var(--amber); }
+
+/* ============ Botones de acciones en tickets ============ */
+.ticket-row__acciones { display: flex; flex-direction: column; gap: 0.4rem; align-items: flex-end; }
+.pago-tag {
+  font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; padding: 0.2rem 0.5rem;
+  border-radius: 2px; background: #D8ECD2; color: #2F6B23;
+}
+.valoracion-tag { font-family: var(--font-mono); font-size: 0.78rem; color: var(--amber-dark); }
+
+/* ============ Acento visual por estado en cada ticket ============ */
+.ticket-row { border-left: 4px solid var(--line); }
+.ticket-row:has(.estado-pendiente) { border-left-color: #C79A3A; }
+.ticket-row:has(.estado-aceptada), .ticket-row:has(.estado-en_proceso) { border-left-color: var(--teal); }
+.ticket-row:has(.estado-completada) { border-left-color: var(--amber); }
+.ticket-row:has(.estado-cancelada) { border-left-color: var(--danger); }
+
+/* ============ Insignia de tipo de cuenta ============ */
+.cuenta-badge {
+  font-family: var(--font-display); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.03em;
+  padding: 0.3rem 0.6rem; border-radius: 999px; display: inline-block;
+}
+.cuenta-badge--cliente { background: #CFE8E7; color: var(--teal); }
+.cuenta-badge--tecnico { background: #F3E3C4; color: var(--amber-dark); }
+
+.cuenta-panel {
+  background: var(--surface); border: 1px solid var(--border); border-left: 5px solid var(--teal);
+  border-radius: var(--radius); padding: 1rem 1.25rem; margin-bottom: 1.5rem;
+  display: flex; flex-direction: column; gap: 0.4rem; align-items: flex-start;
+}
+.cuenta-panel--tecnico { border-left-color: var(--amber); }
+.cuenta-panel__nombre { font-family: var(--font-display); font-size: 1.15rem; font-weight: 600; color: var(--text); }
+.cuenta-panel__meta { font-family: var(--font-mono); font-size: 0.78rem; color: var(--ink-soft); }
+
+@media (max-width: 760px) {
+  .topbar__auth { flex-wrap: wrap; justify-content: flex-end; gap: 0.4rem; row-gap: 0.3rem; }
+}
+
+/* ============ Recibo: encabezado y acciones (solo pantalla) ============ */
+.recibo__print-header { display: none; }
+.recibo__acciones { display: flex; gap: 0.6rem; width: 100%; }
+.recibo__acciones .btn { flex: 1; }
+
+/* ============ Impresión / Guardar como PDF del recibo ============ */
+@media print {
+  body * { visibility: hidden; }
+  #reciboPago, #reciboPago * { visibility: visible; }
+  .modal-overlay {
+    position: static !important; background: none !important; display: block !important;
+  }
+  .modal {
+    position: static !important; max-width: none !important; border: none !important; box-shadow: none !important;
+  }
+  .modal__head, .recibo__acciones { display: none !important; }
+  #reciboPago {
+    position: absolute; top: 0; left: 0; width: 100%; padding: 2rem;
+    display: flex !important; flex-direction: column; align-items: center;
+  }
+  .recibo__print-header {
+    display: block !important; text-align: center; margin-bottom: 1.5rem; width: 100%;
+    border-bottom: 2px solid #12181F; padding-bottom: 1rem;
+  }
+  .recibo__print-marca { font-family: var(--font-display); font-weight: 700; font-size: 1.4rem; color: #12181F; }
+  .recibo__print-marca span { color: var(--amber-dark); }
+  .recibo__tabla { border: 1px solid #ccc; }
+  .recibo__check { background: none !important; color: #2F6B23 !important; }
+}
+
+/* ============ Botón de tema claro/oscuro ============ */
+.theme-toggle {
+  background: none; border: 1px solid var(--paper); color: var(--paper);
+  border-radius: 999px; width: 2.2rem; height: 2.2rem; font-size: 1.05rem;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  opacity: 0.85; margin-left: 0.5rem;
+}
+.theme-toggle:hover { opacity: 1; border-color: var(--amber); }
+
+/* ============ Barra de búsqueda/filtros de Mis tickets ============ */
+.tickets-toolbar { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem; }
+#buscarTickets { width: 100%; }
+
+/* ============ Botón de favorito sobre la tarjeta de técnico ============ */
+.tecnico-card { position: relative; }
+.fav-btn {
+  position: absolute; top: 0.6rem; left: 0.6rem; background: none; border: none;
+  font-size: 1.2rem; cursor: pointer; line-height: 1; color: var(--line);
+  transition: transform 0.1s ease;
+}
+.fav-btn:hover { transform: scale(1.15); }
+.fav-btn--activo { color: var(--danger); }
+
+/* ============ Estadísticas del técnico ============ */
+.estadisticas-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+.estadistica-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 1.1rem;
+}
+.estadistica-card__valor { font-family: var(--font-mono); font-weight: 600; font-size: 1.6rem; color: var(--ink); }
+[data-theme="dark"] .estadistica-card__valor { color: var(--text); }
+.estadistica-card__label { font-size: 0.78rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.02em; }
+
+.grafico-meses {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 1.25rem; display: flex; align-items: flex-end; gap: 0.75rem; height: 160px;
+}
+.grafico-mes { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 0.4rem; }
+.grafico-mes__barra { width: 60%; background: var(--amber); border-radius: 4px 4px 0 0; min-height: 4px; }
+.grafico-mes__label { font-size: 0.68rem; color: var(--ink-soft); font-family: var(--font-mono); }
+
+/* ============ Descripción del servicio en el recibo ============ */
+.recibo__descripcion {
+  width: 100%; text-align: left; font-size: 0.85rem; font-style: italic; color: var(--ink-soft);
+  background: var(--surface-inset); border-left: 3px solid var(--teal); border-radius: 4px;
+  padding: 0.6rem 0.8rem; margin: 0;
+}
